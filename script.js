@@ -1,32 +1,38 @@
 const operate = (a, b, op) => {
-    if (op = "+") {
+    if (a == null || b == null || op == null) {
+        return "ERROR";
+    }
+    if (op == "+") {
         return add(a, b);
     }
-    if (op = "-") {
+    if (op == "-") {
         return subtract(a, b);
     }
-    if (op = "*") {
+    if (op == "*") {
         return multiply(a, b);
     }
-    if (op = "/") {
+    if (op == "/") {
         return divide(a, b);
     }
 };
 
 const add = (a, b) => {
-	return (a+b);
+	return (Math.round((a+b) * 100.0) / 100);
 };
 
 const subtract = function(a, b) {
-	return (a-b);
+	return (Math.round((a-b) * 100.0) / 100);
 };
 
 const multiply = (a, b) => {
-    return (a*b);
+    return (Math.round(a * 100.0 * b) / 100);
 };
 
 const divide = (a, b) => {
-    return (a/b);
+    if (b==0) {
+        return "DIV BY 0 ERROR";
+    };
+    return (Math.round(a * 100.0 / b) / 100);
 };
 
 // const sum = function() {

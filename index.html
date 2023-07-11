@@ -8,31 +8,124 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="body">
     <div id="calc-body">
-        <div id="display">display</div>
+        <div id="display"></div>
         <div id="keys">
-            <button id="one">1</button>
-            <button id="two">2</button>
-            <button id="three">3</button>
-            <button id="four">4</button>
-            <button id="five">5</button>
-            <button id="six">6</button>
-            <button id="seven">7</button>
-            <button id="eight">8</button>
-            <button id="nine">9</button>
-            <button id="zero">0</button>
+            <div id="col1">
+                <button id="one">1</button>
+                <button id="two">2</button>
+                <button id="three">3</button>
+                <button id="four">4</button>
+                <button id="five">5</button>
+            </div>
+            <div id="col2">
+                <button id="six">6</button>
+                <button id="seven">7</button>
+                <button id="eight">8</button>
+                <button id="nine">9</button>
+                <button id="zero">0</button>
+            </div>
 
-            <button id="add">add</button>
-            <button id="subract">sub</button>
-            <button id="multiply">mult</button>
-            <button id="divide">div</button>
-            <button id="equals">equals</button>
+            <div id="col3">
+                <button id="delete">DEL</button>
+                <button id="decimal">.</button>
+                <button id="add">+</button>
+                <button id="subract">-</button>
+                <button id="multiply">*</button>
+                <button id="divide">/</button>
+                <button id="equals">=</button>
+                <button id="clear">C</button>
+            </div>
         </div>
+    </div>
     </div>
 
     <script>
-        var num1, num2, operator;
-
+        var num1, num2, operator, decTest, dispRN, temp, key;
+        let display = document.querySelector("#display")
+        let keys = document.querySelectorAll("button");
+        keys.forEach((key) => {
+            document.addEventListener('keydown', function(event) {
+                if (event.code.slice(5) == key.textContent ) {
+                    key.click();
+                };
+                if (event.code.slice(3) == key.textContent ) {
+                    key.click();
+                };
+            });
+            key.onclick = () => {
+                if (key.textContent == "=") {
+                    display.textContent = operate(parseFloat(num1), parseFloat(num2), operator);
+                } else if (key.textContent == "C") {
+                    display.textContent = "CLEARED";
+                    num1 = null;
+                    operator = null;
+                    num2 = null;
+                } else if (key.textContent == ".") {
+                    decTest = true;
+                    dispRN = display.textContent;
+                    for (let i = 0; i < dispRN.length; i++) {
+                        if (dispRN[i] == ".") {
+                            decTest = false;
+                        };
+                    };
+                    if (decTest) {
+                        if (num1 == dispRN) {
+                            display.textContent += ".";
+                            num1 += ".";
+                        };
+                        if (num2 == dispRN) {
+                            display.textContent += ".";
+                            num2 += ".";
+                        };
+                    };
+                } else if(key.textContent == "DEL") {
+                    dispRN = display.textContent;
+                    temp = 0;
+                    if (num1 == dispRN) {
+                        for (let i = 0; i< num1.length-1; i++) {
+                            console.log(num1[i]);
+                            temp += num1[i];
+                        }
+                        num1 = temp.slice(1);
+                        display.textContent = num1;
+                    };
+                    if (num2 == dispRN) {
+                        for (let i = 0; i< num2.length-1; i++) {
+                            temp += num2[i];
+                        }
+                        num2 = temp.slice(1);
+                        display.textContent = num2;
+                    };
+                } else {
+                    display.textContent = key.textContent;
+                    if (isNaN(parseInt(key.textContent))) {
+                        if (operator == null && num1 != null && num2 == null) {
+                            operator = key.textContent;
+                        } else {
+                            num1 = operate(parseFloat(num1), parseFloat(num2), operator);
+                            num2 = null;
+                            operator = key.textContent;
+                        }
+                    };
+                    if (!isNaN(parseInt(key.textContent))) {
+                        if (num1 != null && operator != null && num2 == null) {
+                            num2 = key.textContent;
+                        } else if (num1 != null && operator != null) {
+                            num2 += key.textContent;
+                            display.textContent = num2;
+                        } else if (num1 == null) {
+                            num1 = key.textContent;
+                        } else {
+                            num1 += key.textContent;
+                            display.textContent = num1;
+                        }
+                    };
+                    console.log(num1 + operator + num2);
+                };
+            };
+        });
     </script>
 </body>
 </html>
